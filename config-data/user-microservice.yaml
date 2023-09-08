@@ -1,2 +1,10 @@
 server:
   port: 8001
+eureka:
+  client:
+    fetch-registry: false
+    register-with-eureka: true
+    service-url:
+      default-zone: hhtp://localhost:9761/eureka
+    instance:
+      hostname: localhost
