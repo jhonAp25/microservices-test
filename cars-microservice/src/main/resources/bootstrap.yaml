@@ -1,0 +1,10 @@
+
+spring:
+  application:
+    name: cars-microservice
+  cloud:
+    config:
+      enabled: true
+      uri: http://localhost:8002
+
+
