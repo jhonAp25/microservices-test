@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          default-label: main
+          uri: https://github.com/jhonAp25/microservices-test
+          search-paths: config-data
+  application:
+    name: configServer
+
+
+

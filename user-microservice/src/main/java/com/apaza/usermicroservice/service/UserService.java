@@ -10,7 +10,10 @@ import com.apaza.usermicroservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class UserService {
@@ -53,6 +56,36 @@ public class UserService {
         Bike bikenew = bikeFeignClient.save(bike);
 
         return bikenew;
+    }
+
+
+    public Map<String , Object> getUserAndVehicles(int id){
+
+        Map<String , Object> result = new HashMap<>();
+        User user = userRepository.findById(id).orElse(null);
+
+        if (user == null){
+            result.put("Mensaje" , "No existe el usuario");
+            return result;
+        }
+        result.put("User" , user);
+
+        List<Car> cars =    carFeignClient.getCar(id);
+        if (cars.isEmpty())
+            result.put("Cars", "Este usuario no tiene carro");
+        else
+            result.put("Cars", cars);
+
+        List<Bike>bikes = bikeFeignClient.getBike(id);
+
+        if (bikes.isEmpty())
+            result.put("Bikes", "Este usuario no tiene BIKES");
+        else
+            result.put("Bikes", bikes);
+
+        return result;
+
+
     }
 
 
