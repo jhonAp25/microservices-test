@@ -21,8 +21,8 @@ spring:
           uri: lb://user-microservice
           predicates: 
             - Path= /user/**        
-        - id: car-microservice
-          uri: lb://car-microservice
+        - id: cars-microservice
+          uri: lb://cars-microservice
           predicates: 
             - Path= /car/**       
         - id: bike-microservice
