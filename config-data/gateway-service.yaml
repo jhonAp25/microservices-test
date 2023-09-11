@@ -18,11 +18,11 @@ spring:
           enabled: true
       routes:
         - id: user-microservice
-          uri: lb://user-sevice
+          uri: lb://user-microservice
           predicates: 
             - Path= /user/**        
         - id: car-microservice
-          uri: lb://car-microsevice
+          uri: lb://car-microservice
           predicates: 
             - Path= /car/**       
         - id: bike-microservice
