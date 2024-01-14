@@ -7,4 +7,4 @@ spring:
       uri: http://localhost:8081
 
 jwt:
-  secret: secret
+  secret: "bWkgY2xhdmUgdGllbmUgcSBzZXIgc2VndXJhIDEyMyBhYWFiYmNjIDc4OQ=="

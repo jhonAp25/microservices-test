@@ -6,11 +6,14 @@ import com.apaza.authservice.dto.TokenDTO;
 import com.apaza.authservice.entity.AuthUser;
 import com.apaza.authservice.repository.AuthUserRepository;
 import com.apaza.authservice.security.JwtProvider;
+import com.apaza.authservice.security.PasswordEncoderConfig;
 import com.netflix.discovery.converters.Auto;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.cert.Extension;
 import java.util.Optional;
 
 @Service
@@ -26,6 +29,8 @@ public class AuthUserService {
     @Autowired
     JwtProvider jwtProvider;
 
+
+
     public AuthUser save (AuthUserDTO userDTO){
         Optional<AuthUser> user = authUserRepository.findByUserName(userDTO.getUserName());
         if(user.isPresent())
@@ -38,6 +43,7 @@ public class AuthUserService {
 
         return authUserRepository.save(authUser);
     }
+
 
     public TokenDTO login(AuthUserDTO userDTO){
         Optional<AuthUser> user = authUserRepository.findByUserName(userDTO.getUserName());

@@ -70,6 +70,27 @@
 			<version>0.11.5</version>
 		</dependency>
 
+		<!--logback 1.4.14-->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.4.14</version>
+		</dependency>
+		<!--logback core 1.4.11-->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.4.14</version>
+		</dependency>
+
+
+		<!-- JAVAX EE  -->
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+			<version>3.0.0-M1</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>com.h2database</groupId>
