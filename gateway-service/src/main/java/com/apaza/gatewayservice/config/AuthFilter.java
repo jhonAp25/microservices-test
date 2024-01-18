@@ -2,6 +2,9 @@ package com.apaza.gatewayservice.config;
 
 
 import com.apaza.gatewayservice.dto.TokenDTO;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
@@ -12,22 +15,33 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+
+
 @Component
+@Slf4j
 public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config>{
 
 
+    final static Logger logger = LoggerFactory.getLogger(AuthFilter.class);
     private WebClient.Builder webClient;
 
     public AuthFilter(WebClient.Builder webClient) {
+
+
+
         super(Config.class);
         this.webClient = webClient;
     }
+
+
     @Override
     public GatewayFilter apply(Config config) {
         return (((exchange, chain) -> {
             if(!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION))
                 return onError(exchange, HttpStatus.BAD_REQUEST);
             String tokenHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+            logger.info("ABAJOO- APAZA");
+            logger.info(tokenHeader);
             String [] chunks = tokenHeader.split(" ");
             if(chunks.length != 2 || !chunks[0].equals("Bearer"))
                 return onError(exchange, HttpStatus.BAD_REQUEST);

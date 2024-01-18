@@ -7,14 +7,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
-import java.util.HashMap;
+
 import java.util.Map;
 
 
@@ -42,16 +39,16 @@ public class JwtProvider {
     public  String createToken (AuthUser authUser){
 
 
-        Map<String , Object> claims = new HashMap<>();
-        claims = Jwts.claims().setSubject(authUser.getUserName());
-        claims.put("id", authUser.getId());
-        claims.put("name", authUser.getUserName());
+        Map<String , Object> claims ;
+        claims = Jwts.claims().setSubject(authUser.getUsername());
+        claims.put("rol", authUser.getRole().toString());
+
         Date now = new Date();
         Date exp = new Date(now.getTime() + 3600000 ) ;
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(authUser.getUserName())
+                .setSubject(authUser.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(exp)
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
@@ -63,7 +60,8 @@ public class JwtProvider {
     public boolean validate (String token ){
 
         try {
-            Jwts.parserBuilder().setSigningKey(getKey()).build().parseClaimsJwt(token);
+
+            Jwts.parser().setSigningKey(getKey()).parseClaimsJws(token);
             return true;
 
         }catch (Exception e){

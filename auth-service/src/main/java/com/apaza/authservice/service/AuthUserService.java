@@ -3,7 +3,9 @@ package com.apaza.authservice.service;
 
 import com.apaza.authservice.dto.AuthUserDTO;
 import com.apaza.authservice.dto.TokenDTO;
+import com.apaza.authservice.dto.UserDTO;
 import com.apaza.authservice.entity.AuthUser;
+import com.apaza.authservice.entity.Role;
 import com.apaza.authservice.repository.AuthUserRepository;
 import com.apaza.authservice.security.JwtProvider;
 import com.apaza.authservice.security.PasswordEncoderConfig;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.cert.Extension;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,14 +34,16 @@ public class AuthUserService {
 
 
 
-    public AuthUser save (AuthUserDTO userDTO){
-        Optional<AuthUser> user = authUserRepository.findByUserName(userDTO.getUserName());
+    public AuthUser save (UserDTO userDTO){
+        Optional<AuthUser> user = authUserRepository.findByUsername(userDTO.getUsername());
         if(user.isPresent())
-            return null;
+            throw new RuntimeException("No se puede duplicar el USERNAME");
         String password = passwordEncoder.encode(userDTO.getPassword());
+        String userText = userDTO.getUsername();
         AuthUser authUser = AuthUser.builder()
-                .userName(userDTO.getUserName())
+                .username(userText)
                 .password(password)
+                .role(Role.valueOf(userDTO.getRol()))
                 .build();
 
         return authUserRepository.save(authUser);
@@ -46,7 +51,7 @@ public class AuthUserService {
 
 
     public TokenDTO login(AuthUserDTO userDTO){
-        Optional<AuthUser> user = authUserRepository.findByUserName(userDTO.getUserName());
+        Optional<AuthUser> user = authUserRepository.findByUsername(userDTO.getUsername());
         if(!user.isPresent())
             return null;
         if (passwordEncoder.matches(userDTO.getPassword(), user.get().getPassword()))
@@ -59,8 +64,12 @@ public class AuthUserService {
         if (!jwtProvider.validate(token))
             return null;
         String username= jwtProvider.getUserNameFromToken(token);
-        if(!authUserRepository.findByUserName(username).isPresent())
+        if(!authUserRepository.findByUsername(username).isPresent())
             return null;
         return new TokenDTO(token);
+    }
+
+    public List<AuthUser> listUsers (){
+        return authUserRepository.findAll();
     }
 }
